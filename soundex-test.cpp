@@ -6,7 +6,7 @@ using namespace testing;
 std::string padZero(const std::string &str)
 {
   const int maxLength{4};
-  if (str.length() < 4) return str + std::string(maxLength - str.length(), '0');
+  if (str.size() < 4) return str + std::string(maxLength - str.size(), '0');
   return str;
 }
 
@@ -42,3 +42,4 @@ TEST_F(SoundexEncoding, PadsWithZerosToEnsureThreeDigits)
 {
   ASSERT_THAT(soundex.encode("I"), Eq("I000"));
 }
+
