@@ -1,6 +1,6 @@
 #include <string>
-#include "gmock/gmock.h"
 #include <unordered_map>
+#include "gmock/gmock.h"
 
 using namespace testing;
 
@@ -12,6 +12,7 @@ std::string padZero(const std::string &str)
 }
 
 std::string head(const std::string &word) { return word.substr(0, 1); }
+std::string tail(const std::string &word) { return word.substr(1); }
 
 std::string encodedDigit(char letter)
 {
@@ -31,8 +32,8 @@ std::string encodedDigit(char letter)
 
 std::string encodedDigits(const std::string &word)
 {
-  if (word.size() > 1) return encodedDigit(word[1]);
-  return "";
+  if (word.empty()) return "";
+  return encodedDigit(word.front());
 }
 
 class Soundex
@@ -40,7 +41,7 @@ class Soundex
  public:
   std::string encode(const std::string &word) const
   {
-    return padZero(head(word) + encodedDigits(word));
+    return padZero(head(word) + encodedDigits(tail(word)));
   }
 };
 
@@ -68,4 +69,9 @@ TEST_F(SoundexEncoding, ReplacesConsonantsWithAppropriateDigits)
 TEST_F(SoundexEncoding, IgnoresNonAlphabetics)
 {
   ASSERT_THAT(soundex.encode("A#"), Eq("A000"));
+}
+
+TEST_F(SoundexEncoding, DISABLED_ReplacesMultipleConsonantsWithDigits)
+{
+  ASSERT_THAT(soundex.encode("Acdl"), Eq("A234"));
 }
