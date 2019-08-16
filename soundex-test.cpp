@@ -12,9 +12,11 @@ std::string padZero(const std::string &str)
 
 std::string head(const std::string &word) { return word.substr(0, 1); }
 
+std::string encodedDigit() { return "1"; }
+
 std::string encodedDigits(const std::string &word)
 {
-  if (word.size() > 1) return "1";
+  if (word.size() > 1) return encodedDigit();
   return "";
 }
 
