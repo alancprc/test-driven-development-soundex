@@ -15,7 +15,9 @@ class Soundex
  public:
   std::string encode(const std::string &word) const
   {
-    return padZero(word);
+    auto encoded = word.substr(0, 1);
+    if (word.size() > 1) encoded += "1";
+    return padZero(encoded);
   }
 };
 
@@ -27,7 +29,7 @@ class SoundexEncoding : public testing::Test
 
 TEST_F(SoundexEncoding, RetainSoleLetterOfOneLetterWord)
 {
-  ASSERT_THAT(soundex.encode("A"), Eq("A000"));
+  ASSERT_THAT(soundex.encode("Ab"), Eq("A100"));
 }
 
 TEST_F(SoundexEncoding, PadsWithZerosToEnsureThreeDigits)
