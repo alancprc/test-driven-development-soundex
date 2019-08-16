@@ -25,7 +25,8 @@ std::string encodedDigit(char letter)
       {'m', "5"}, {'n', "5"},
       {'r', "6"}};
   // clang-format on
-  return encodings.find(letter)->second;
+  auto it = encodings.find(letter);
+  return it == encodings.end() ? "" : it->second;
 }
 
 std::string encodedDigits(const std::string &word)
@@ -64,8 +65,7 @@ TEST_F(SoundexEncoding, ReplacesConsonantsWithAppropriateDigits)
   ASSERT_THAT(soundex.encode("Ax"), Eq("A200"));
 }
 
-using SoundexEncodingDeathTest = SoundexEncoding;
-TEST_F(SoundexEncodingDeathTest, IgnoresNonAlphabetics)
+TEST_F(SoundexEncoding, IgnoresNonAlphabetics)
 {
-  ASSERT_DEATH({soundex.encode("A#");}, "");
+  ASSERT_THAT(soundex.encode("A#"), Eq("A000"));
 }
