@@ -32,8 +32,11 @@ std::string encodedDigit(char letter)
 
 std::string encodedDigits(const std::string &word)
 {
-  if (word.empty()) return "";
-  return encodedDigit(word.front());
+  std::string result;
+  for (auto it = word.cbegin(); it != word.cend(); ++it) {
+    result += encodedDigit(*it);
+  }
+  return result;
 }
 
 class Soundex
@@ -71,7 +74,7 @@ TEST_F(SoundexEncoding, IgnoresNonAlphabetics)
   ASSERT_THAT(soundex.encode("A#"), Eq("A000"));
 }
 
-TEST_F(SoundexEncoding, DISABLED_ReplacesMultipleConsonantsWithDigits)
+TEST_F(SoundexEncoding, ReplacesMultipleConsonantsWithDigits)
 {
   ASSERT_THAT(soundex.encode("Acdl"), Eq("A234"));
 }
