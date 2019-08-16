@@ -31,13 +31,16 @@ std::string encodedDigit(char letter)
   return it == encodings.end() ? "" : it->second;
 }
 
+bool IsComplete(std::string word) { return word.size() == maxLength - 1; }
+
 std::string encodedDigits(const std::string &word)
 {
   std::string result;
   for (auto it = word.cbegin(); it != word.cend(); ++it) {
+    if (IsComplete(result)) break;
     result += encodedDigit(*it);
   }
-  return result.substr(0, maxLength - 1);
+  return result;
 }
 
 class Soundex
