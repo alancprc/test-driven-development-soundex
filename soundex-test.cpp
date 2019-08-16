@@ -63,3 +63,9 @@ TEST_F(SoundexEncoding, ReplacesConsonantsWithAppropriateDigits)
 {
   ASSERT_THAT(soundex.encode("Ax"), Eq("A200"));
 }
+
+using SoundexEncodingDeathTest = SoundexEncoding;
+TEST_F(SoundexEncodingDeathTest, IgnoresNonAlphabetics)
+{
+  ASSERT_DEATH({soundex.encode("A#");}, "");
+}
