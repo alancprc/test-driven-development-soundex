@@ -1,4 +1,4 @@
-all : clear test
+all : test
 
 TARGET=soundex-test
 
@@ -17,5 +17,3 @@ test : soundex-test
 clean:
 	rm -f ${TARGET}
 
-clear:
-	clear
