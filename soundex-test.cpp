@@ -4,9 +4,10 @@
 
 using namespace testing;
 
+const int maxLength{4};
+
 std::string padZero(const std::string &str)
 {
-  const int maxLength{4};
   if (str.size() < 4) return str + std::string(maxLength - str.size(), '0');
   return str;
 }
@@ -36,7 +37,7 @@ std::string encodedDigits(const std::string &word)
   for (auto it = word.cbegin(); it != word.cend(); ++it) {
     result += encodedDigit(*it);
   }
-  return result;
+  return result.substr(0, maxLength - 1);
 }
 
 class Soundex
@@ -77,4 +78,9 @@ TEST_F(SoundexEncoding, IgnoresNonAlphabetics)
 TEST_F(SoundexEncoding, ReplacesMultipleConsonantsWithDigits)
 {
   ASSERT_THAT(soundex.encode("Acdl"), Eq("A234"));
+}
+
+TEST_F(SoundexEncoding, LimitsLengthToFourCharacters)
+{
+  ASSERT_THAT(soundex.encode("Dcblb").size(), Eq(4u));
 }
