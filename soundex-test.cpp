@@ -96,5 +96,8 @@ TEST_F(SoundexEncoding, IgnoresVowelLikeLetters)
 
 TEST_F(SoundexEncoding, CombinesDuplicateEncodings)
 {
+  ASSERT_THAT(encodedDigit('b'), Eq(encodedDigit('f')));
+  ASSERT_THAT(encodedDigit('c'), Eq(encodedDigit('g')));
+  ASSERT_THAT(encodedDigit('d'), Eq(encodedDigit('t')));
   ASSERT_THAT(soundex.encode("Abfcgdt"), Eq("A123"));
 }
