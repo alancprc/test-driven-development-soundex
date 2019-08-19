@@ -5,6 +5,7 @@
 using namespace testing;
 
 const int maxLength{4};
+const std::string NotADigit("*");
 
 std::string padZero(const std::string &str)
 {
@@ -28,13 +29,14 @@ std::string encodedDigit(char letter)
       {'r', "6"}};
   // clang-format on
   auto it = encodings.find(letter);
-  return it == encodings.end() ? "" : it->second;
+  return it == encodings.end() ? NotADigit : it->second;
 }
 
 bool IsComplete(std::string word) { return word.size() == maxLength - 1; }
 
 std::string lastDigit(const std::string str)
 {
+  if (str.empty()) return NotADigit;
   return std::string(1, str.back());
 }
 
@@ -43,7 +45,8 @@ std::string encodedDigits(const std::string &word)
   std::string result;
   for (auto it = word.cbegin(); it != word.cend(); ++it) {
     if (IsComplete(result)) break;
-    if (encodedDigit(*it) != lastDigit(result))
+    auto digit = encodedDigit(*it);
+    if (digit != NotADigit and encodedDigit(*it) != lastDigit(result))
         result += encodedDigit(*it);
   }
   return result;
