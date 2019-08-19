@@ -46,10 +46,19 @@ void encodeHead(std::string &result, const std::string &word)
   result += encodedDigit(word.front());
 }
 
+bool isVowel(char ch)
+{
+  return std::string("aeiouAEIOU").find(ch) != std::string::npos;
+}
+
 void encodeLetter(std::string &result, char letter)
 {
+  static char lastLetter = '\0';
   auto digit = encodedDigit(letter);
-  if (digit != NotADigit and digit != lastDigit(result)) result += digit;
+  if (digit != NotADigit and
+      (isVowel(lastLetter) or digit != lastDigit(result)))
+    result += digit;
+  lastLetter = letter;
 }
 
 void encodeTail(std::string &result, const std::string &word)
@@ -69,7 +78,7 @@ std::string encodedDigits(const std::string &word)
   return result;
 }
 
-std::string upperFront(const std::string & string)
+std::string upperFront(const std::string &string)
 {
   return std::string(1,
                      std::toupper(static_cast<unsigned char>(string.front())));
@@ -144,4 +153,8 @@ TEST_F(SoundexEncoding, IgnoresCaseWhenEncodingConsonants)
 TEST_F(SoundexEncoding, CombinesDuplicateCodesWhen2ndLetterDuplicates1st)
 {
   ASSERT_THAT(soundex.encode("Bbcd"), Eq("B230"));
+}
+TEST_F(SoundexEncoding, DoesNotCombineDuplicateEncodingsSeparatedByVowels)
+{
+  ASSERT_THAT(soundex.encode("Jbob"), Eq("J110"));
 }
