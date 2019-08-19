@@ -46,13 +46,18 @@ void encodeHead(std::string &result, const std::string &word)
   result += encodedDigit(word.front());
 }
 
+void encodeLetter(std::string &result, char letter)
+{
+  auto digit = encodedDigit(letter);
+  if (digit != NotADigit and digit != lastDigit(result)) result += digit;
+}
+
 void encodeTail(std::string &result, const std::string &word)
 {
   for (auto it = word.begin(); it != word.end(); ++it) {
     if (IsComplete(result)) break;
 
-    auto digit = encodedDigit(*it);
-    if (digit != NotADigit and digit != lastDigit(result)) result += digit;
+    encodeLetter(result, *it);
   }
 }
 
