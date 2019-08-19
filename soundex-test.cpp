@@ -33,7 +33,7 @@ std::string encodedDigit(char letter)
   return it == encodings.end() ? NotADigit : it->second;
 }
 
-bool IsComplete(std::string word) { return word.size() == maxLength - 1; }
+bool IsComplete(std::string word) { return word.size() == maxLength; }
 
 std::string lastDigit(const std::string str)
 {
@@ -43,7 +43,7 @@ std::string lastDigit(const std::string str)
 
 std::string encodedDigits(const std::string &word)
 {
-  std::string result;
+  std::string result = encodedDigit(word.front());
   for (auto it = word.cbegin(); it != word.cend(); ++it) {
     if (IsComplete(result)) break;
     auto digit = encodedDigit(*it);
@@ -63,7 +63,7 @@ class Soundex
  public:
   std::string encode(const std::string &word) const
   {
-    return padZero(upperFront(head(word)) + encodedDigits(tail(word)));
+    return padZero(upperFront(head(word)) + tail(encodedDigits(word)));
   }
 };
 
@@ -123,4 +123,8 @@ TEST_F(SoundexEncoding, UppercasesFirstLetter)
 TEST_F(SoundexEncoding, IgnoresCaseWhenEncodingConsonants)
 {
   ASSERT_THAT(soundex.encode("BCDL"), Eq(soundex.encode("Bcdl")));
+}
+TEST_F(SoundexEncoding, CombinesDuplicateCodesWhen2ndLetterDuplicates1st)
+{
+  ASSERT_THAT(soundex.encode("Bbcd"), Eq("B230"));
 }
