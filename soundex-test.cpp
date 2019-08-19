@@ -15,6 +15,7 @@ std::string padZero(const std::string &str)
 
 std::string head(const std::string &word) { return word.substr(0, 1); }
 std::string tail(const std::string &word) { return word.substr(1); }
+char lower(char ch) { return std::tolower(static_cast<unsigned char>(ch)); }
 
 std::string encodedDigit(char letter)
 {
@@ -28,7 +29,7 @@ std::string encodedDigit(char letter)
       {'m', "5"}, {'n', "5"},
       {'r', "6"}};
   // clang-format on
-  auto it = encodings.find(letter);
+  auto it = encodings.find(lower(letter));
   return it == encodings.end() ? NotADigit : it->second;
 }
 
@@ -118,4 +119,8 @@ TEST_F(SoundexEncoding, CombinesDuplicateEncodings)
 TEST_F(SoundexEncoding, UppercasesFirstLetter)
 {
   ASSERT_THAT(soundex.encode("abcd"), StartsWith("A"));
+}
+TEST_F(SoundexEncoding, IgnoresCaseWhenEncodingConsonants)
+{
+  ASSERT_THAT(soundex.encode("BCDL"), Eq(soundex.encode("Bcdl")));
 }
