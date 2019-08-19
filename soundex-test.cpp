@@ -33,12 +33,18 @@ std::string encodedDigit(char letter)
 
 bool IsComplete(std::string word) { return word.size() == maxLength - 1; }
 
+std::string lastDigit(const std::string str)
+{
+  return std::string(1, str.back());
+}
+
 std::string encodedDigits(const std::string &word)
 {
   std::string result;
   for (auto it = word.cbegin(); it != word.cend(); ++it) {
     if (IsComplete(result)) break;
-    result += encodedDigit(*it);
+    if (encodedDigit(*it) != lastDigit(result))
+        result += encodedDigit(*it);
   }
   return result;
 }
