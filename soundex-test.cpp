@@ -41,17 +41,29 @@ std::string lastDigit(const std::string str)
   return std::string(1, str.back());
 }
 
+void encodeHead(std::string &result, const std::string &word)
+{
+  result += encodedDigit(word.front());
+}
+
+void encodeTail(std::string &result, const std::string &word)
+{
+  for (auto it = word.begin(); it != word.end(); ++it) {
+    if (IsComplete(result)) break;
+
+    auto digit = encodedDigit(*it);
+    if (digit != NotADigit and digit != lastDigit(result)) result += digit;
+  }
+}
+
 std::string encodedDigits(const std::string &word)
 {
-  std::string result = encodedDigit(word.front());
-  for (auto it = word.cbegin(); it != word.cend(); ++it) {
-    if (IsComplete(result)) break;
-    auto digit = encodedDigit(*it);
-    if (digit != NotADigit and encodedDigit(*it) != lastDigit(result))
-        result += encodedDigit(*it);
-  }
+  std::string result;
+  encodeHead(result, word);
+  encodeTail(result, word);
   return result;
 }
+
 std::string upperFront(const std::string & string)
 {
   return std::string(1,
