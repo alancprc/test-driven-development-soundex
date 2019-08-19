@@ -48,13 +48,18 @@ std::string encodedDigits(const std::string &word)
   }
   return result;
 }
+std::string upperFront(const std::string & string)
+{
+  return std::string(1,
+                     std::toupper(static_cast<unsigned char>(string.front())));
+}
 
 class Soundex
 {
  public:
   std::string encode(const std::string &word) const
   {
-    return padZero(head(word) + encodedDigits(tail(word)));
+    return padZero(upperFront(head(word)) + encodedDigits(tail(word)));
   }
 };
 
@@ -106,4 +111,8 @@ TEST_F(SoundexEncoding, CombinesDuplicateEncodings)
   ASSERT_THAT(encodedDigit('c'), Eq(encodedDigit('g')));
   ASSERT_THAT(encodedDigit('d'), Eq(encodedDigit('t')));
   ASSERT_THAT(soundex.encode("Abfcgdt"), Eq("A123"));
+}
+TEST_F(SoundexEncoding, UppercasesFirstLetter)
+{
+  ASSERT_THAT(soundex.encode("abcd"), StartsWith("A"));
 }
