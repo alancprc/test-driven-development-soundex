@@ -1,6 +1,6 @@
 all : test
 
-TARGET=soundex-test
+TARGET=unit_test
 
 
 CXXFLAGS += -g -Wall -Wextra -pthread -std=c++0x
@@ -8,10 +8,10 @@ LDFLAGS += -shared -Wl,-rpath='$$ORIGIN' -pthread
 USE_GTEST_AS_LIB = -DGTEST_LINKED_SHARED_LIBRARY=1
 
 
-${TARGET} : soundex-test.cpp
+${TARGET} : soundex.h soundex.cpp unit_test.cpp
 	g++ ${CXXFLAGS} ${USE_GTEST_AS_LIB} -o $@ $^ -lgmock_main -lgmock -lgtest
 
-test : soundex-test
+test : ${TARGET}
 	./${TARGET}
 
 clean:
