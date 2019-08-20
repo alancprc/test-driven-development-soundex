@@ -2,9 +2,6 @@
 #define SOUNDEX_H_
 #include <string>
 
-extern const int maxLength;
-extern const std::string NotADigit;
-
 class Soundex
 {
  public:
@@ -16,6 +13,11 @@ class Soundex
   void encodeHead(std::string &result, const std::string &word) const;
   void encodeTail(std::string &result, const std::string &word) const;
   void encodeLetter(std::string &result, char letter) const;
+  std::string lastDigit(const std::string &str) const;
+
+  const size_t maxLength{4};
+  const std::string NotADigit{"*"};
+  const char padChar{'0'};
 };
 
 
@@ -27,7 +29,7 @@ std::string head(const std::string &word);
 
 std::string tail(const std::string &word);
 
-std::string padZero(const std::string &str);
+std::string paddingChar(const std::string &str, char ch, size_t size);
 
 std::string upperFront(const std::string &string);
 

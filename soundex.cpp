@@ -1,23 +1,11 @@
 #include "soundex.h"
 #include <unordered_map>
 
-const int maxLength{4};
-const std::string NotADigit("*");
-
 std::string Soundex::encode(const std::string &word) const
 {
-  return padZero(upperFront(head(word)) + tail(encodedDigits(word)));
+  return paddingChar(upperFront(head(word)) + tail(encodedDigits(word)),
+                     padChar, maxLength);
 }
-
-std::string padZero(const std::string &str)
-{
-  if (str.size() < 4) return str + std::string(maxLength - str.size(), '0');
-  return str;
-}
-
-std::string head(const std::string &word) { return word.substr(0, 1); }
-std::string tail(const std::string &word) { return word.substr(1); }
-char lower(char ch) { return std::tolower(static_cast<unsigned char>(ch)); }
 
 std::string Soundex::encodedDigit(char letter) const
 {
@@ -40,7 +28,7 @@ bool Soundex::IsComplete(std::string word) const
   return word.size() == maxLength;
 }
 
-std::string lastDigit(const std::string str)
+std::string Soundex::lastDigit(const std::string &str) const
 {
   if (str.empty()) return NotADigit;
   return std::string(1, str.back());
@@ -49,11 +37,6 @@ std::string lastDigit(const std::string str)
 void Soundex::encodeHead(std::string &result, const std::string &word)const
 {
   result += encodedDigit(word.front());
-}
-
-bool isVowel(char ch)
-{
-  return std::string("aeiouAEIOU").find(ch) != std::string::npos;
 }
 
 void Soundex::encodeLetter(std::string &result, char letter) const
@@ -81,6 +64,23 @@ std::string Soundex::encodedDigits(const std::string &word) const
   encodeHead(result, word);
   encodeTail(result, word);
   return result;
+}
+
+char lower(char ch) { return std::tolower(static_cast<unsigned char>(ch)); }
+
+bool isVowel(char ch)
+{
+  return std::string("aeiouAEIOU").find(ch) != std::string::npos;
+}
+
+std::string head(const std::string &word) { return word.substr(0, 1); }
+
+std::string tail(const std::string &word) { return word.substr(1); }
+
+std::string paddingChar(const std::string &str, char ch, size_t size)
+{
+  if (str.size() < 4) return str + std::string(size - str.size(), ch);
+  return str;
 }
 
 std::string upperFront(const std::string &string)
